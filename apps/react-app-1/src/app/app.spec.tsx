@@ -20,7 +20,7 @@ describe('App', () => {
       </BrowserRouter>
     );
     expect(
-      getAllByText(new RegExp('Welcome react-app-1', 'gi')).length > 0
+      getAllByText(new RegExp('Welcome react-app-1')).length > 0
     ).toBeTruthy();
   });
 });
