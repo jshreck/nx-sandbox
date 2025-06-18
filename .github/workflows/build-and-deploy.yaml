@@ -1,0 +1,33 @@
+name: Build and Deploy
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Setup
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+      - name: Install Dependencies
+        run: yarn install
+      - name: Build website
+        run: npx nx run react-app-1:build
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: react-app-1-files
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: react-app-1-files
+      - name: Deploy
+        run: echo "Deploy coming soon..."
