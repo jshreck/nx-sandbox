@@ -12,6 +12,4 @@ runs:
     - name: Install Dependencies
       if: steps.cache-dependencies.outputs.cache-hit != 'true'
       run: yarn install --immutable
-    - name: Build website
-      run: npx nx run react-app-1:build
       shell: bash
