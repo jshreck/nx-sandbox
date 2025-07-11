@@ -8,6 +8,7 @@ on:
         type: choice
         options:
           - react-app-1
+run-name: Deploy ${{ inputs.app-name }}
 
 jobs:
   build:
