@@ -16,7 +16,7 @@ runs:
       shell: bash
     - name: Zip build output
       run: |
-        cd ${{ inputs.build-folder }}
+        cd apps/${{ inputs.app-name }}/${{ inputs.build-folder }}
         zip -r ../${{ inputs.app-name }}.zip .
       shell: bash
     - name: Upload artifacts
@@ -24,6 +24,9 @@ runs:
       with:
         name: ${{ inputs.app-name }}
         path: ${{ inputs.app-name }}.zip
+    - name: Delete zip file
+      run: rm apps/${{ inputs.app-name }}/${{ inputs.app-name }}.zip
+      shell: bash
     - name: Set output file name
       run: echo "file-name=${{ inputs.app-name }}.zip" >> $GITHUB_OUTPUT
       shell: bash
