@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      file-name: ${{ steps.build_and_upload.outputs.file-name }}
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -32,4 +34,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Show artifact file name
-        run: echo "Artifact file: ${{ needs.build.steps.build_and_upload.outputs.file-name }}"
+        run: echo "Artifact file: ${{ needs.build.outputs.file-name }}"
