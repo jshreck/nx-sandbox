@@ -1,9 +1,9 @@
 name: CI
 
 on:
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - ci-test
 
 permissions:
   actions: read

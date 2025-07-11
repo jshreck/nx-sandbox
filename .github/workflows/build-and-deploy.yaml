@@ -34,4 +34,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Show artifact file name
-        run: echo "Artifact file: ${{ needs.build.outputs.file-name }}"
+        run: |
+          ARTIFACT_FILE_NAME="${{ needs.build.outputs.file-name }}"
+          echo "Artifact file: $ARTIFACT_FILE_NAME"
