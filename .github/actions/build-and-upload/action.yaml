@@ -1,0 +1,32 @@
+name: 'Build and Upload App'
+description: 'Builds a specified app and uploads its build artifacts.'
+inputs:
+  app-name:
+    description: 'The name of the app to build.'
+    required: true
+  build-folder:
+    description: 'The folder containing the build output.'
+    required: false
+    default: 'dist'
+runs:
+  using: 'composite'
+  steps:
+    - name: Build website
+      run: npx nx run ${{ inputs.app-name }}:build
+      shell: bash
+    - name: Zip build output
+      run: |
+        cd ${{ inputs.build-folder }}
+        zip -r ../${{ inputs.app-name }}.zip .
+      shell: bash
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ inputs.app-name }}
+        path: ${{ inputs.app-name }}.zip
+    - name: Set output file name
+      run: echo "file-name=${{ inputs.app-name }}.zip" >> $GITHUB_OUTPUT
+      shell: bash
+outputs:
+  file-name:
+    description: 'The name of the zipped artifact file.'

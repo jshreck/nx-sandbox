@@ -1,0 +1,35 @@
+name: Build and Deploy
+on:
+  workflow_dispatch:
+    inputs:
+      app-name:
+        description: 'Select the app to build and deploy'
+        required: true
+        type: choice
+        options:
+          - react-app-1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Setup
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+      - name: Load and Cache Dependencies
+        uses: ./.github/actions/cache-dep
+      - name: Build and Upload
+        id: build_and_upload
+        uses: ./.github/actions/build-and-upload
+        with:
+          app-name: ${{ github.event.inputs.app-name }}
+          build-folder: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show artifact file name
+        run: echo "Artifact file: ${{ needs.build.steps.build_and_upload.outputs.file-name }}"

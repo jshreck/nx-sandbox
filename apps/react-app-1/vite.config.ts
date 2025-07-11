@@ -14,6 +14,9 @@ export default defineConfig(() => ({
     host: 'localhost',
   },
   plugins: [react()],
+  define: {
+    'process.env': process.env,
+  },
   // Uncomment this if you are using workers.
   // worker: {
   //  plugins: [ nxViteTsPaths() ],
