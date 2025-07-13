@@ -22,6 +22,6 @@ runs:
         name: ${{ inputs.app-name }}
     - name: Deploy to S3
       run: |
-        unzip ${{ inputs.app-artifact-name }}.zip
+        unzip ${{ inputs.app-artifact-name }}
         npx aws-cli s3 sync . "s3://${{ inputs.bucket }}" --region "${{ inputs['bucket-region'] }}"
       shell: bash
