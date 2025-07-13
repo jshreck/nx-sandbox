@@ -30,7 +30,7 @@ runs:
     - name: Set output file name
       id: set_output
       run: |
-        echo "file-name=${{ inputs.app-name }}" >> $GITHUB_OUTPUT
+        echo "file-name=${{ inputs.app-name }}.zip" >> $GITHUB_OUTPUT
       shell: bash
 outputs:
   file-name:
