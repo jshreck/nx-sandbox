@@ -23,14 +23,14 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.app-name }}
-        path: apps/${{ inputs.app-name }}.zip
+        path: apps/${{ inputs.app-name }}/${{ inputs.app-name }}.zip
     - name: Delete zip file
       run: rm apps/${{ inputs.app-name }}/${{ inputs.app-name }}.zip
       shell: bash
     - name: Set output file name
       id: set_output
       run: |
-        echo "file-name=${{ inputs.app-name }}.zip" >> $GITHUB_OUTPUT
+        echo "file-name=${{ inputs.app-name }}" >> $GITHUB_OUTPUT
       shell: bash
 outputs:
   file-name:
