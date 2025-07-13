@@ -14,9 +14,11 @@ export default defineConfig(() => ({
     host: 'localhost',
   },
   plugins: [react()],
-  define: {
-    'process.env': process.env,
-  },
+  define: Object.fromEntries(
+    Object.entries(process.env)
+      .filter(([key]) => key.startsWith('VITE_'))
+      .map(([key, value]) => [`process.env.${key}`, JSON.stringify(value)])
+  ),
   // Uncomment this if you are using workers.
   // worker: {
   //  plugins: [ nxViteTsPaths() ],

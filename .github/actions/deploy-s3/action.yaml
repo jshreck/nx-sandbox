@@ -6,13 +6,9 @@ inputs:
     required: true
   bucket-region:
     description: 'The region of the S3 bucket.'
-    required: false
-    default: 'us-east-1'
-  dist-folder:
-    description: 'The folder containing the deployable files.'
     required: true
-  app-name:
-    description: 'The name of the app artifact to download.'
+  app-artifact-name:
+    description: 'The name of the (zipped) app artifact to download.'
     required: true
 outputs:
   website-url:
@@ -23,8 +19,14 @@ runs:
     - name: Download build artifacts
       uses: actions/download-artifact@v4
       with:
-        name: ${{ inputs.app-name }}
+        name: ${{ inputs.app-artifact-name }}
+        path: .
     - name: Deploy to S3
       run: |
-        npx aws-cli s3 sync "${{ inputs.dist-folder }}" "s3://${{ inputs.bucket }}" --region "${{ inputs['bucket-region'] }}"
+        unzip ${{ inputs.app-artifact-name }}
+        aws s3 sync . "s3://${{ inputs.bucket }}" --region "${{ inputs['bucket-region'] }}"
+      shell: bash
+    - name: Echo website url
+      run: |
+        echo "website-url=https://s3.${{ inputs['bucket-region'] }}.amazonaws.com/${{ inputs.bucket }}/"
       shell: bash
