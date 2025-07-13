@@ -43,12 +43,15 @@ jobs:
             echo "BUCKET=${{ secrets.REACT_APP_1_BUCKET }}" >> $GITHUB_ENV
             echo "REGION=${{ secrets.REACT_APP_1_REGION }}" >> $GITHUB_ENV
           fi
-      - name: Deploy to S3 bucket
-        uses: ./.github/actions/deploy-s3
-        with:
-          bucket: ${{ env.bucket }}
-          bucket-region: ${{ env.region }}
-          app-artifact-name: ${{ needs.build.outputs.file-name }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Debug artifact name
+        run: |
+          echo "Artifact: ${{ needs.build.outputs.file-name }}"
+      # - name: Deploy to S3 bucket
+      #   uses: ./.github/actions/deploy-s3
+      #   with:
+      #     bucket: ${{ env.bucket }}
+      #     bucket-region: ${{ env.region }}
+      #     app-artifact-name: ${{ needs.build.outputs.file-name }}
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
