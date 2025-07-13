@@ -33,8 +33,17 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - app-name: react-app-1
+            bucket: ${{ secrets.REACT_APP_1_BUCKET }}
+            bucket-region: ${{ secrets.REACT_APP_1_REGION }}
     steps:
-      - name: Show artifact file name
-        run: |
-          ARTIFACT_FILE_NAME="${{ needs.build.outputs.file-name }}"
-          echo "Artifact file: $ARTIFACT_FILE_NAME"
+      - name: Deploy to S3 bucket
+        if: matrix.app-name == github.event.inputs.app-name
+        uses: ./.github/actions/deploy-s3
+        with:
+          bucket: ${{ matrix.bucket }}
+          bucket-region: ${{ matrix.bucket-region }}
+          app-artifact-name: ${{ needs.build.outputs.file-name }}
