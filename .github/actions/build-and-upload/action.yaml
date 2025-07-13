@@ -28,11 +28,8 @@ runs:
       run: rm apps/${{ inputs.app-name }}/${{ inputs.app-name }}.zip
       shell: bash
     - name: Set output file name
-      id: set_output
-      run: echo "file-name=${{ inputs.app-name }}.zip" >> $GITHUB_OUTPUT
-      shell: bash
-    - name: Debug output value
-      run: echo "Debug: file-name is ${{ steps.set_output.outputs.file-name }}"
+      run: |
+        echo "file-name=${{ inputs.app-name }}.zip" >> $GITHUB_OUTPUT
       shell: bash
 outputs:
   file-name:
