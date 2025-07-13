@@ -17,15 +17,15 @@ runs:
     - name: Zip build output
       run: |
         cd apps/${{ inputs.app-name }}/${{ inputs.build-folder }}
-        zip -r ../${{ inputs.app-name }} .
+        zip -r ../${{ inputs.app-name }}.zip .
       shell: bash
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.app-name }}
-        path: apps/${{ inputs.app-name }}/${{ inputs.app-name }}
+        path: apps/${{ inputs.app-name }}/${{ inputs.app-name }}.zip
     - name: Delete zip file
-      run: rm apps/${{ inputs.app-name }}/${{ inputs.app-name }}
+      run: rm apps/${{ inputs.app-name }}/${{ inputs.app-name }}.zip
       shell: bash
     - name: Set output file name
       id: set_output
