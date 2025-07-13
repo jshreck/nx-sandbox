@@ -36,7 +36,7 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
-      - name: Set env secrets
+      - name: Set app s3 bucket and region
         id: set_secrets
         run: |
           if [ "${{ inputs.app-name }}" = "react-app-1" ]; then
@@ -49,3 +49,6 @@ jobs:
           bucket: ${{ env.bucket }}
           bucket-region: ${{ env.region }}
           app-artifact-name: ${{ needs.build.outputs.file-name }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
