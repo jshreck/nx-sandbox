@@ -17,20 +17,20 @@ runs:
     - name: Zip build output
       run: |
         cd apps/${{ inputs.app-name }}/${{ inputs.build-folder }}
-        zip -r ../${{ inputs.app-name }}.zip .
+        zip -r ../${{ inputs.app-name }} .
       shell: bash
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.app-name }}
-        path: apps/${{ inputs.app-name }}/${{ inputs.app-name }}.zip
+        path: apps/${{ inputs.app-name }}/${{ inputs.app-name }}
     - name: Delete zip file
-      run: rm apps/${{ inputs.app-name }}/${{ inputs.app-name }}.zip
+      run: rm apps/${{ inputs.app-name }}/${{ inputs.app-name }}
       shell: bash
     - name: Set output file name
       id: set_output
       run: |
-        echo "file-name=${{ inputs.app-name }}.zip" >> $GITHUB_OUTPUT
+        echo "file-name=${{ inputs.app-name }}" >> $GITHUB_OUTPUT
       shell: bash
 outputs:
   file-name:
