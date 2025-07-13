@@ -26,3 +26,7 @@ runs:
         unzip ${{ inputs.app-artifact-name }}
         aws s3 sync . "s3://${{ inputs.bucket }}" --region "${{ inputs['bucket-region'] }}"
       shell: bash
+    - name: Echo website url
+      run: |
+        echo "website-url=https://s3.${{ inputs['bucket-region'] }}.amazonaws.com/${{ inputs.bucket }}/"
+      shell: bash
