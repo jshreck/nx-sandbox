@@ -33,17 +33,16 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - app-name: react-app-1
-            bucket: ${{ secrets.REACT_APP_1_BUCKET }}
-            bucket-region: ${{ secrets.REACT_APP_1_REGION }}
     steps:
+      - name: Set env secrets
+        id: set_secrets
+        run: |
+          if [ "${{ inputs.app-name }}" = "react-app-1" ]; then
+            echo "BUCKET=${{ secrets.REACT_APP_1_BUCKET }}" >> $GITHUB_ENV
+            echo "REGION=${{ secrets.REACT_APP_1_REGION }}" >> $GITHUB_ENV
       - name: Deploy to S3 bucket
-        if: matrix.app-name == github.event.inputs.app-name
         uses: ./.github/actions/deploy-s3
         with:
-          bucket: ${{ matrix.bucket }}
-          bucket-region: ${{ matrix.bucket-region }}
+          bucket: ${{ env.bucket }}
+          bucket-region: ${{ env.region }}
           app-artifact-name: ${{ needs.build.outputs.file-name }}
