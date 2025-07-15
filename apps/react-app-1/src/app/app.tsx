@@ -13,6 +13,7 @@ export function App() {
     <EnvironmentContext.Provider
       value={{ config: { isUsingRuntimeEnvVar: !!config.TEST_RUNTIME_VAR } }}
     >
+      <h1>Welcome react-app-1</h1>
       <TestEnvVariables />
     </EnvironmentContext.Provider>
   );

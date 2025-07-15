@@ -5,7 +5,6 @@ const TestEnvVariables = () => {
   const { config } = useEnvironmentContext();
   return (
     <div>
-      <h1>Welcome react-app-1</h1>
       <p>Build time var (direct access): {process.env.VITE_TEST_VAR}</p>
       <p>
         Runtime var (direct access):{' '}
