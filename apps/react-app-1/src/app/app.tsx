@@ -1,13 +1,20 @@
-import { isLoadingRuntimeVar } from '../application.config';
+import { TestEnvVariables } from '../components/testEnvVariables';
+import { EnvironmentContext } from '../environment-context/environmentContext';
+import { HostedConfig } from '../types/hostedConfig';
 
 export function App() {
+  const config = window.__RUNTIME_CONFIG__ as HostedConfig;
+
+  if (!config) {
+    return <p> App is down</p>;
+  }
+
   return (
-    <div>
-      <h1>Welcome react-app-1</h1>
-      <p>Build time var: {process.env.VITE_TEST_VAR}</p>
-      <p>Runtime var: {window.__RUNTIME_CONFIG__?.TEST_RUNTIME_VAR}</p>
-      <p>is loading runtime env: {isLoadingRuntimeVar}</p>
-    </div>
+    <EnvironmentContext.Provider
+      value={{ config: { isUsingRuntimeEnvVar: !!config.TEST_RUNTIME_VAR } }}
+    >
+      <TestEnvVariables />
+    </EnvironmentContext.Provider>
   );
 }
 

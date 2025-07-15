@@ -1,5 +1,6 @@
-const isLoadingRuntimeVar = Boolean(
-  window.__RUNTIME_CONFIG__?.TEST_RUNTIME_VAR
-).toString();
+const isLoadingRuntimeVar = () =>
+  window.__RUNTIME_CONFIG__?.TEST_RUNTIME_VAR === 'runtime';
 
-export { isLoadingRuntimeVar };
+const isLoadingBuildEnv = !!process.env.VITE_TEST_VAR;
+
+export { isLoadingRuntimeVar, isLoadingBuildEnv };
