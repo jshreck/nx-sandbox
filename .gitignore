@@ -1,5 +1,8 @@
 # See https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
+# local-only files
+libs/configs/src/configs/local/react-app-1.json
+
 # compiled output
 dist
 tmp

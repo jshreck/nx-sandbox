@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "composite": true,
     "declarationMap": true,
     "emitDeclarationOnly": true,
@@ -17,9 +18,9 @@
     "strict": true,
     "target": "es2022",
     "customConditions": ["development"],
+    "resolveJsonModule": true,
     "paths": {
-      "@libs/configs/local/*": ["libs/configs/src/configs/local/*"],
-      "@libs/configs/types/*": ["libs/configs/types/*"]
+      "@libs/configs": ["libs/configs/src/index.ts"]
     }
   }
 }

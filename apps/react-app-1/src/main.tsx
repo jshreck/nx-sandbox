@@ -1,12 +1,12 @@
 import * as ReactDOM from 'react-dom/client';
 import App from './app/app';
-import { isHostedConfig } from '@libs/configs/types/hostedConfig';
-import localConfig from '@libs/configs/local/react-app-1.json';
+import { isHostedConfig } from '@libs/configs';
+import { reactApp1LocalConfig } from '@libs/configs';
 
 const loadRuntimeConfig = async () => {
   if (window.location.hostname === 'localhost') {
-    window.__RUNTIME_CONFIG__ = localConfig;
-    if (!isHostedConfig(localConfig)) {
+    window.__RUNTIME_CONFIG__ = reactApp1LocalConfig;
+    if (!isHostedConfig(reactApp1LocalConfig)) {
       console.warn('Invalid runtime config format');
     }
   } else {
