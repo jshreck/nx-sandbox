@@ -33,9 +33,17 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    outputs:
+      CLOUDFRONT_DISTRIBUTION_ID: ${{ steps.set_cloudfront_distribution_id.outputs.value }}
     steps:
       - name: Get code
         uses: actions/checkout@v3
+      - name: Set CloudFront distribution ID
+        id: set_cloudfront_distribution_id
+        run: |
+          if [ "${{ inputs.app-name }}" = "react-app-1" ]; then
+            echo "CLOUDFRONT_DISTRIBUTION_ID=E2GXV0O3K75EF8" >> $CLOUDFRONT_DISTRIBUTION_ID
+          fi
       - name: Set app s3 bucket and region
         id: set_secrets
         run: |
@@ -44,11 +52,12 @@ jobs:
             echo "REGION=${{ secrets.REACT_APP_1_REGION }}" >> $GITHUB_ENV
           fi
       - name: Deploy to S3 bucket
-        uses: ./.github/actions/deploy-s3
+        uses: ./.github/actions/deploy-app-s3
         with:
           bucket: ${{ env.BUCKET }}
           bucket-region: ${{ env.REGION }}
           app-artifact-name: ${{ needs.build.outputs.file-name }}
+          cloudfront-distribution-id: ${{ steps.set_cloudfront_distribution_id.outputs.CLOUDFRONT_DISTRIBUTION_ID }}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -1,5 +1,5 @@
-name: 'Deploy to AWS S3'
-description: 'Deploy the built website to AWS S3 bucket'
+name: 'Deploy App to AWS S3'
+description: 'Deploy the built app to AWS S3 bucket'
 inputs:
   bucket:
     description: 'The S3 bucket name.'
@@ -9,6 +9,9 @@ inputs:
     required: true
   app-artifact-name:
     description: 'The name of the (zipped) app artifact to download.'
+    required: true
+  cloudfront-distribution-id:
+    description: 'The CloudFront distribution ID for cache invalidation.'
     required: true
 outputs:
   website-url:
@@ -26,7 +29,7 @@ runs:
         unzip ${{ inputs.app-artifact-name }}
         aws s3 sync . "s3://${{ inputs.bucket }}" --region "${{ inputs['bucket-region'] }}"
       shell: bash
-    - name: Echo website url
+    - name: Invalidate CloudFront cache
       run: |
-        echo "website-url=https://s3.${{ inputs['bucket-region'] }}.amazonaws.com/${{ inputs.bucket }}/"
+        aws cloudfront create-invalidation --distribution-id ${{ inputs.cloudfront-distribution-id }} --paths "/*"
       shell: bash
