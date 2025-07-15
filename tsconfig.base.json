@@ -16,6 +16,10 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "es2022",
-    "customConditions": ["development"]
+    "customConditions": ["development"],
+    "paths": {
+      "@libs/configs/local/*": ["libs/configs/src/configs/local/*"],
+      "@libs/configs/types/*": ["libs/configs/types/*"]
+    }
   }
 }
