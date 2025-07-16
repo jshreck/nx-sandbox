@@ -38,18 +38,19 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
-      - name: Set CloudFront distribution ID
-        id: set_cloudfront_distribution_id
-        run: |
-          if [ "${{ inputs.app-name }}" = "react-app-1" ]; then
-            echo "CLOUDFRONT_DISTRIBUTION_ID=E2GXV0O3K75EF8" >> $CLOUDFRONT_DISTRIBUTION_ID
-          fi
+
       - name: Set app s3 bucket and region
         id: set_secrets
         run: |
           if [ "${{ inputs.app-name }}" = "react-app-1" ]; then
             echo "BUCKET=${{ secrets.REACT_APP_1_BUCKET }}" >> $GITHUB_ENV
             echo "REGION=${{ secrets.REACT_APP_1_REGION }}" >> $GITHUB_ENV
+          fi
+      - name: Set CloudFront distribution ID
+        id: set_cloudfront_distribution_id
+        run: |
+          if [ "${{ inputs.app-name }}" = "react-app-1" ]; then
+            echo "value=E2GXV0O3K75EF8" >> $GITHUB_OUTPUT
           fi
       - name: Deploy to S3 bucket
         uses: ./.github/actions/deploy-app-s3
