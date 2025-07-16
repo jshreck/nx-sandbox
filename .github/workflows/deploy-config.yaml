@@ -34,6 +34,9 @@ jobs:
             echo "value=ET94AF6UH5C6Z" >> $GITHUB_OUTPUT
           fi
       - name: Deploy to S3 bucket
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           aws s3 cp ${{ inputs.app-name }}.json s3://${{ secrets.CONFIGS_BUCKET }}/${{ inputs.app-name }}.json --region "${{ secrets.CONFIGS_REGION }}"
       - name: Invalidate CloudFront cache
