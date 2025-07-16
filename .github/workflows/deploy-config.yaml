@@ -27,7 +27,7 @@ jobs:
       - name: Download config artifact
         uses: actions/download-artifact@v4
         with:
-          name: ${{ inputs.app-name }}.json
+          name: ${{ inputs.app-name }}
           path: .
       - name: Set CloudFront distribution ID
         id: set_cloudfront_distribution_id
