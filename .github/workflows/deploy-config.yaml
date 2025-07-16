@@ -33,7 +33,7 @@ jobs:
         id: set_cloudfront_distribution_id
         run: |
           if [ "${{ inputs.app-name }}" = "react-app-1" ]; then
-            echo "CLOUDFRONT_DISTRIBUTION_ID" >> $CLOUDFRONT_DISTRIBUTION_ID
+            echo "value=ET94AF6UH5C6Z" >> $GITHUB_OUTPUT
           fi
       - name: Deploy to S3 bucket
         run: |
