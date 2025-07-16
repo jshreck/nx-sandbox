@@ -14,8 +14,6 @@ run-name: Deploy Config for ${{ inputs.app-name }}
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    outputs:
-      CLOUDFRONT_DISTRIBUTION_ID: ${{ steps.set_cloudfront_distribution_id.outputs.value }}
     steps:
       - name: Get code
         uses: actions/checkout@v3
