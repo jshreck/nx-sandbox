@@ -1,15 +1,18 @@
 import * as ReactDOM from 'react-dom/client';
 import App from './app/app';
-import { isHostedConfig } from '@libs/configs';
-import { reactApp1LocalConfig } from '@libs/configs';
 
 const loadRuntimeConfig = async () => {
   if (window.location.hostname === 'localhost') {
+    // Dynamically import only when running locally
+    const { reactApp1LocalConfig, isHostedConfig } = await import(
+      '@libs/configs'
+    );
     window.__RUNTIME_CONFIG__ = reactApp1LocalConfig;
     if (!isHostedConfig(reactApp1LocalConfig)) {
       console.warn('Invalid runtime config format');
     }
   } else {
+    const { isHostedConfig } = await import('@libs/configs');
     await fetch('https://d2utt9g60l5nz9.cloudfront.net/prod.json')
       .then((response) => {
         if (!response.ok) {
