@@ -8,6 +8,9 @@
     },
     {
       "path": "./apps/react-app-1"
+    },
+    {
+      "path": "./libs/configs"
     }
   ]
 }
