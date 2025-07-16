@@ -35,7 +35,7 @@ jobs:
           fi
       - name: Deploy to S3 bucket
         run: |
-          echo 'Deploy coming soon...'
+          aws s3 cp ${{ inputs.app-name }}.json s3://${{ secrets.CONFIGS_BUCKET }}/${{ inputs.app-name }}.json --region "${{ secrets.CONFIGS_REGION }}"
       - name: Invalidate CloudFront cache
         run: |
-          echo 'should invalidate cloudfront cache (file)...'
+          aws cloudfront create-invalidation --distribution-id ${{ steps.set_cloudfront_distribution_id.outputs.value }} --paths "/${{ inputs.app-name }}.json"
