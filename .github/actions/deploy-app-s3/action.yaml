@@ -26,7 +26,6 @@ runs:
         path: .
     - name: Deploy to S3
       run: |
-        unzip ${{ inputs.app-artifact-name }}
         aws s3 sync . "s3://${{ inputs.bucket }}" --region "${{ inputs['bucket-region'] }}"
       shell: bash
     - name: Invalidate CloudFront cache

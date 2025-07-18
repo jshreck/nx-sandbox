@@ -13,7 +13,7 @@ const loadRuntimeConfig = async () => {
     }
   } else {
     const { isHostedConfig } = await import('@libs/configs');
-    await fetch('https://d2utt9g60l5nz9.cloudfront.net/prod.json')
+    await fetch('https://d2utt9g60l5nz9.cloudfront.net/react-app-1.json')
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

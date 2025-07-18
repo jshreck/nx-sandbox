@@ -14,8 +14,9 @@ run-name: Deploy Config for ${{ inputs.app-name }}
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    outputs:
-      CLOUDFRONT_DISTRIBUTION_ID: ${{ steps.set_cloudfront_distribution_id.outputs.value }}
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -27,17 +28,17 @@ jobs:
       - name: Download config artifact
         uses: actions/download-artifact@v4
         with:
-          name: ${{ inputs.app-name }}.json
+          name: ${{ inputs.app-name }}
           path: .
       - name: Set CloudFront distribution ID
         id: set_cloudfront_distribution_id
         run: |
           if [ "${{ inputs.app-name }}" = "react-app-1" ]; then
-            echo "CLOUDFRONT_DISTRIBUTION_ID=ET94AF6UH5C6Z" >> $CLOUDFRONT_DISTRIBUTION_ID
+            echo "value=ET94AF6UH5C6Z" >> $GITHUB_OUTPUT
           fi
       - name: Deploy to S3 bucket
         run: |
-          echo 'Deploy coming soon...'
+          aws s3 cp ${{ inputs.app-name }}.json s3://${{ secrets.CONFIGS_BUCKET }}/${{ inputs.app-name }}.json --region "${{ secrets.CONFIGS_REGION }}"
       - name: Invalidate CloudFront cache
         run: |
-          echo 'should invalidate cloudfront cache (file)...'
+          aws cloudfront create-invalidation --distribution-id ${{ steps.set_cloudfront_distribution_id.outputs.value }} --paths "/${{ inputs.app-name }}.json"
