@@ -3,17 +3,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Test Action
-        uses: ./.github/actions/test-action
-        with:
-          test_value: 'Hello World'
-
   test-artifacts:
     runs-on: ubuntu-latest
     steps:
@@ -35,7 +24,7 @@ jobs:
           # artifact name
           name: test-artifact
           # optional destination path, default is github workspace
-          path: /some-folder
+          path: some-folder
         #   path: ./app/react-app-1/public
 
       - name: Echo download path
