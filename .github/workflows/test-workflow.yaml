@@ -23,7 +23,7 @@ jobs:
           # optional artifact naem
           name: test-artifact
           # what to upload
-          path: ./app/react-app-1/public/
+          path: apps/react-app-1/public
 
       - name: Download Test Artifact
         uses: actions/download-artifact@v5
