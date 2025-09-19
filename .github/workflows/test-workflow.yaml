@@ -55,7 +55,7 @@ jobs:
               required_contexts: [],
               auto_merge: false,
               payload: {
-                sha: ${{ github.sha }},
+                sha: context.sha,
               },
             });
 
