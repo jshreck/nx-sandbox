@@ -33,5 +33,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy
-        run: echo "Yay, it deployed to ${{ inputs.environment }}"
+      - name: Create Deployment Via API
+        id: create_deploy
+        run: |
+          DEPLOY_RESPONSE=$(gh api repos/${{ github.repository }}/deployments -f ref=${{ github.sha }} \
+            -f environment=${{ inputs.environment }} \
+            -f description="Deploy SHA ${{ github.sha }} by ${{ github.actor }}" \
+            -f payload='{"version":"v1.0.0"}' \
+            -f required_contexts='[]' \
+            --jq '.id')
+          echo "deployment_id=$DEPLOY_RESPONSE" >> $GITHUB_OUTPUT
+
+      - name: Update deployment status
+        run: |
+          gh api repos/${{ github.repository }}/deployments/${{ steps.create_deploy.outputs.deployment_id }}/statuses \
+            -f state=success \
+            -f environment_url="https://my-app.example.com" \
+            -f description="Deployment succeeded 🚀"
