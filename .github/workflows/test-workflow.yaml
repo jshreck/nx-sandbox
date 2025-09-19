@@ -23,24 +23,30 @@ jobs:
       - name: Upload Test Artifact
         uses: actions/upload-artifact@v4
         with:
-          # optional artifact naem
+          # optional artifact name
           name: test-artifact
           # what to upload
           path: apps/react-app-1/public
 
       - name: Download Test Artifact
+        id: download
         uses: actions/download-artifact@v5
         with:
           # artifact name
           name: test-artifact
-        #   # optional destination path, default is github workspace
+          # optional destination path, default is github workspace
+          path: /some-folder
         #   path: ./app/react-app-1/public
 
+      - name: Echo download path
+        run: |
+          echo "Downloaded to: ${{ steps.download.outputs.download-path }}"
+
       - name: Display structure of downloaded files
-        run: ls -R
+        run: ls -R ${{ steps.download.outputs.download-path }}
 
       - name: Unzip Test Artifact
-        run: unzip ./test-artifact -d /some-folder
+        run: unzip ${{ steps.download.outputs.download-path }}/test-artifact -d /unzipped
 
       - name: List Unzipped Files
-        run: ls -R /some-folder
+        run: ls -R /unzipped
