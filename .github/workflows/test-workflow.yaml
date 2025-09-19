@@ -29,6 +29,8 @@ jobs:
     environment:
       name: ${{ inputs.environment }}
       url: 'https://example.com'
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
