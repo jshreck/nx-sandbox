@@ -38,12 +38,7 @@ jobs:
       - name: Create Deployment Via API
         id: create_deploy
         run: |
-          DEPLOY_RESPONSE=$(gh api repos/${{ github.repository }}/deployments -f ref=${{ github.sha }} \
-            -f environment=${{ inputs.environment }} \
-            -f description="Deploy SHA ${{ github.sha }} by ${{ github.actor }}" \
-            -f payload='{"version":"v1.0.0"}' \
-            --raw-field required_contexts=null \
-            --jq '.id')
+          DEPLOY_RESPONSE=$(gh api repos/${{ github.repository }}/deployments --raw-field required_contexts=null -f ref=${{ github.sha }} -f environment=${{ inputs.environment }} -f description="Deploy SHA ${{ github.sha }} by ${{ github.actor }}" -f payload='{"version":"v1.0.0"}' --jq '.id')
           echo "deployment_id=$DEPLOY_RESPONSE" >> $GITHUB_OUTPUT
 
       - name: Update deployment status
