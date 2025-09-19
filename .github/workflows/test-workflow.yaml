@@ -1,15 +1,6 @@
 name: Test Workflow
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        type: choice
-        options:
-          - dev
-          - prod
-        description: 'The environment to deploy to'
-        required: true
-        default: 'dev'
 
 jobs:
   test:
@@ -23,45 +14,27 @@ jobs:
         with:
           test_value: 'Hello World'
 
-  fake-deploy:
-    name: 🚀 Deploy to ${{ inputs.environment }}
+  test-artifacts:
     runs-on: ubuntu-latest
-    environment:
-      name: ${{ inputs.environment }}
-      url: 'https://example.com'
-    env:
-      GITHUB_TOKEN: ${{ github.token }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Create GitHub Deployment
-        uses: actions/github-script@v7
+      - name: Upload Test Artifact
+        uses: actions/upload-artifact@v4
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            const ref = context.ref;
-            const environment = ${{inputs.environment}}
-            const description = 'Deploying app to ${{inputs.environment}}';
+          # optional artifact naem
+          name: test-artifact
+          # what to upload
+          path: ./app/react-app-1/public
 
-            await github.rest.repos.createDeployment({
-              owner,
-              repo,
-              ref,
-              environment,
-              description,
-              required_contexts: [],
-              auto_merge: false,
-              payload: {
-                sha: context.sha,
-              },
-            });
+      - name: Download Test Artifact
+        uses: actions/download-artifact@v5
+        with:
+          # artifact name
+          name: test-artifact
+        #   # optional destination path, default is github workspace
+        #   path: ./app/react-app-1/public
 
-      - name: Update deployment status
-        run: |
-          gh api repos/${{ github.repository }}/deployments/${{ steps.create_deploy.outputs.deployment_id }}/statuses \
-            -f state=success \
-            -f environment_url="https://my-app.example.com" \
-            -f description="Deployment succeeded 🚀"
+      - name: Display structure of downloaded files
+        run: ls -R
+
+      - name: Unzip Test Artifact
+        run: unzip ./test-artifact -d /some-folder
