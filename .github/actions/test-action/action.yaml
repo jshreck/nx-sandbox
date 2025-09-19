@@ -1,60 +1,21 @@
 name: 'Deploy App'
 description: 'Deploys app to Amazon S3 bucket and invalidates CloudFront cache'
 inputs:
-  app_name:
-    description: 'The name of the app being deployed.'
-    required: true
-  # artifact_name:
-  #   description: 'The name of the artifact to deploy'
-  #   required: true
-  env:
-    description: 'The environment to deploy the app to.'
-    required: true
+  test_value:
+  required: true
 
 runs:
   using: 'composite'
   steps:
-    # - name: Download Build Artifact
-    #   uses: actions/download-artifact@v4
-    #   id: artifact-download
-    #   with:
-    #     name: ${{ inputs.artifact_name }}
-    #     path: ./${{ inputs.app_name }}-build
-
     - name: Logging Inputs For Testing
       run: |
         echo "appName: ${{ inputs.app_name }}"
         echo "environment: ${{ inputs.env }}"
       shell: bash
 
-    - name: Get App Deploy Config
-      id: get-config
+    - name: Call JS
       env:
-        APP_NAME: ${{ inputs.app_name }}
-        ENV: ${{ inputs.env }}
+        TEST_VALUE: ${{ inputs.test_value }}
       run: |
         node .github/actions/deploy-app/dist/index.js
       shell: bash
-
-    - name: Logging For Testing
-      run: |
-        echo "s3BucketName: ${{ steps.get-config.outputs.s3BucketName }}"
-        echo "cloudfrontDistributionId: ${{ steps.get-config.outputs.cloudfrontDistributionId }}"
-        echo "awsAccountId: ${{ steps.get-config.outputs.awsAccountId }}"
-      shell: bash
-
-    # - name: Configure AWS credentials
-    #   uses: aws-actions/configure-aws-credentials@v1-node16
-    #   with:
-    #     role-to-assume: 'arn:aws:iam::${{ steps.get-config.outputs.awsAccountId }}:role/cicd/${{ secrets.OIDC_AWS_ROLE_TO_ASSUME }}
-    #     role-session-name: 'alle-frontend-${{ inputs.app_name }}-deploy'
-    #     aws-region: us-east-1
-
-    # - name: Deploy to S3
-    #   run: |
-    #     aws s3 cp /${{ inputs.app_name }}-build s3://${{ steps.get-config.outputs.s3BucketName }} --exclude '*.js' --exclude '*.css' --exclude '*.woff' --exclude '*.woff2' --recursive
-    #     aws s3 sync /${{ inputs.app_name }}-build s3://${{ steps.get-config.outputs.s3BucketName }} --delete --exclude '*' --include '*.js' --include '*.css' --include '*.woff' --include '*.woff2' --cache-control 'public, max-age=31536000, s-max-age=31536000, immutable'
-
-    # - name: Invalidate Cloudfront
-    #   run: |
-    #     aws cloudfront create-invalidation --distribution-id ${{ steps.get-config.outputs.cloudfrontDistributionId }} --paths "/*"
