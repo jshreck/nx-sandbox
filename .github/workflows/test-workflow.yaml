@@ -35,21 +35,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create Deployment Via API
-        id: create_deploy
-        run: |
-          cat > payload.json <<EOF
-          {
-            "ref": "${{ github.sha }}",
-            "environment": "${{ inputs.environment }}",
-            "description": "Deploy SHA ${{ github.sha }} by ${{ github.actor }}",
-            "payload": { "version": "v1.0.0" },
-            "required_contexts": null
-          }
-          EOF
+      - name: Create GitHub Deployment
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const ref = context.ref;
+            const environment = ${{inputs.environment}}
+            const description = 'Deploying app to ${{inputs.environment}}';
 
-          DEPLOY_RESPONSE=$(gh api repos/${{ github.repository }}/deployments --raw-input payload.json --jq '.id')
-          echo "deployment_id=$DEPLOY_RESPONSE" >> $GITHUB_OUTPUT
+            await github.rest.repos.createDeployment({
+              owner,
+              repo,
+              ref,
+              environment,
+              description,
+              required_contexts: [],
+              auto_merge: false,
+              payload: {
+                sha: ${{ github.sha }},
+              },
+            });
 
       - name: Update deployment status
         run: |
