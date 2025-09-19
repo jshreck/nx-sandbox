@@ -9,13 +9,12 @@ runs:
   steps:
     - name: Logging Inputs For Testing
       run: |
-        echo "appName: ${{ inputs.app_name }}"
-        echo "environment: ${{ inputs.env }}"
+        echo "test_value: ${{ inputs.test_value }}"
       shell: bash
 
     - name: Call JS
       env:
         TEST_VALUE: ${{ inputs.test_value }}
       run: |
-        node .github/actions/deploy-app/dist/index.js
+        node .github/actions/test-action/dist/index.js
       shell: bash
