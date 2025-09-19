@@ -30,7 +30,7 @@ jobs:
       name: ${{ inputs.environment }}
       url: 'https://example.com'
     env:
-      GH_TOKEN: ${{ github.token }}
+      GITHUB_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -42,7 +42,7 @@ jobs:
             -f environment=${{ inputs.environment }} \
             -f description="Deploy SHA ${{ github.sha }} by ${{ github.actor }}" \
             -f payload='{"version":"v1.0.0"}' \
-            -f required_contexts='[]' \
+            -f required_contexts=null \
             --jq '.id')
           echo "deployment_id=$DEPLOY_RESPONSE" >> $GITHUB_OUTPUT
 
