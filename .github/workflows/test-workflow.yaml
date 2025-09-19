@@ -1,6 +1,15 @@
 name: Test Workflow
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        options:
+          - dev
+          - prod
+        description: 'The environment to deploy to'
+        required: true
+        default: 'dev'
 
 jobs:
   test:
@@ -15,14 +24,14 @@ jobs:
           test_value: 'Hello World'
 
   fake-deploy:
-    name: 🚀 Deploy to Dev
+    name: 🚀 Deploy to ${{ inputs.environment }}
     runs-on: ubuntu-latest
     environment:
-      name: dev
+      name: ${{ inputs.environment }}
       url: 'https://example.com'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Deploy
-        run: echo "Yay, it deployed"
+        run: echo "Yay, it deployed to ${{ inputs.environment }}"
