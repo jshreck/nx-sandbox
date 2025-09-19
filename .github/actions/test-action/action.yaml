@@ -1,8 +1,8 @@
 name: 'Deploy App'
 description: 'Deploys app to Amazon S3 bucket and invalidates CloudFront cache'
 inputs:
-  test_value: string
-  required: true
+  test_value:
+    required: true
 
 runs:
   using: 'composite'
