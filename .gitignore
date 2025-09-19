@@ -5,6 +5,7 @@
 
 # compiled output
 dist
+!.github/actions/**/dist/
 tmp
 out-tsc
 
