@@ -13,3 +13,16 @@ jobs:
         uses: ./.github/actions/test-action
         with:
           test_value: 'Hello World'
+
+  fake-deploy:
+    name: 🚀 Deploy to Dev
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: 'https://example.com'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy
+        run: echo "Yay, it deployed"
