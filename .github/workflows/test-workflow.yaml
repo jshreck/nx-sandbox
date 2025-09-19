@@ -17,6 +17,9 @@ jobs:
   test-artifacts:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Upload Test Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -38,3 +41,6 @@ jobs:
 
       - name: Unzip Test Artifact
         run: unzip ./test-artifact -d /some-folder
+
+      - name: List Unzipped Files
+        run: ls -R /some-folder
